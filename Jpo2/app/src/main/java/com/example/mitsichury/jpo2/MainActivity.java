@@ -18,7 +18,7 @@ import java.text.NumberFormat;
 
 
 public class MainActivity extends Activity implements SensorEventListener{
-    private static final int TEMPS = 12;
+    private static final int TEMPS = 120;
     SensorManager controleurDeSenseurs;
     ZoneDeDessin zoneDeDessin;
     Sensor accelerometre;
