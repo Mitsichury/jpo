@@ -158,7 +158,7 @@ public class MainActivity extends Activity implements SensorEventListener{
 
     @Override
     protected void onResume() {
-        controleurDeSenseurs.registerListener(this, accelerometre, SensorManager.SENSOR_DELAY_UI);
+        controleurDeSenseurs.registerListener(this, accelerometre, SensorManager.SENSOR_DELAY_GAME);
         super.onResume();
     }
 
@@ -166,10 +166,10 @@ public class MainActivity extends Activity implements SensorEventListener{
     public void onSensorChanged(SensorEvent event) {
         float x, y;
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            x = 5*event.values[0];
-            y = 5*event.values[1];
+            x = 3*event.values[0];
+            y = 3*event.values[1];
 
-            if((Math.abs(x) > 2 || Math.abs(y) > 2)){
+            if((Math.abs(x) > 1 || Math.abs(y) > 1)){
                 zoneDeDessin.definirLaPositionDuPoint((int) (zoneDeDessin.recuperePositionXduPoint() - x), (int) (zoneDeDessin.recuperePositionYduPoint() + y));
                 verifieQueSortDecran();
                 zoneDeDessin.dessiner();
