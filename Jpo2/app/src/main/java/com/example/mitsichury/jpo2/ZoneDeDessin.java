@@ -90,12 +90,12 @@ public class ZoneDeDessin extends View{
 
     public void cacherLeCarre(){
         carre.setPosition(10000, 10000);
-        this.invalidate();
+        //this.invalidate();
     }
 
     public void afficherLeCarre(){
         changeLeCarreDePosition();
-        this.invalidate();
+        //this.invalidate();
     }
 
     public int savoirLenombreDeCarreMange(){
