@@ -65,7 +65,6 @@ public class MainActivity extends Activity{
             }
         });
 
-
         boutonRecommencer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
