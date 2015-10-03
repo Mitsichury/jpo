@@ -80,7 +80,7 @@ public class MainActivity extends Activity implements SensorEventListener{
             }
         });
 
-        boutonRecommencer = (Button)findViewById(R.id.boutonRecommncer);
+        boutonRecommencer = (Button)findViewById(R.id.boutonRecommencer);
 
         boutonRecommencer.setOnClickListener(new View.OnClickListener() {
             @Override
