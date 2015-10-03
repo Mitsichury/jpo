@@ -25,8 +25,8 @@
         android:layout_height="wrap_content"
         android:text="New Button"
         android:id="@+id/boutonRecommencer"
-        android:visibility="gone"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:visibility="gone" />
 
 </RelativeLayout>

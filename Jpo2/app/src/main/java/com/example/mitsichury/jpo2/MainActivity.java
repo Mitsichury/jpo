@@ -20,11 +20,9 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 
-public class MainActivity extends Activity implements SensorEventListener{
+public class MainActivity extends Activity{
     private static final int TEMPS = 120;
-    SensorManager controleurDeSenseurs;
     ZoneDeDessin zoneDeDessin;
-    Sensor accelerometre;
     Handler handler;
     int hauteur;
     int largeur;
@@ -32,9 +30,7 @@ public class MainActivity extends Activity implements SensorEventListener{
     int tempsRestant;
     Button boutonRecommencer;
     Runnable quiGereLeTemps;
-    NumberFormat deuxChiffresPourLesSecondes;
     Runnable testIps;
-
     float xTouchUp;
     float yTouchUp;
 
@@ -44,21 +40,10 @@ public class MainActivity extends Activity implements SensorEventListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Display ecran = getWindowManager().getDefaultDisplay();
-        Point taille = new Point();
-        // Si la version est inférieur à celle de honeycomb (13)
-        if(android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB_MR2){
-            hauteur = ecran.getHeight();
-            largeur = ecran.getWidth();
-        }
-        else{
-            ecran.getSize(taille);
-            largeur = taille.x;
-            hauteur = taille.y;
-        }
-
         minuteur = (TextView)findViewById(R.id.textView);
         zoneDeDessin = (ZoneDeDessin)findViewById(R.id.drawview);
+        boutonRecommencer = (Button)findViewById(R.id.boutonRecommencer);
+
         zoneDeDessin.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -68,8 +53,8 @@ public class MainActivity extends Activity implements SensorEventListener{
                     yTouchUp = event.getY();
                 }
 
-                if(event.getAction() == MotionEvent.ACTION_MOVE){
-                    zoneDeDessin.definirLaPositionDuPoint(zoneDeDessin.recuperePositionXduPoint()+(int)(xTouchUp - event.getX()), zoneDeDessin.recuperePositionYduPoint()+(int)(yTouchUp - event.getY()));
+                if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    zoneDeDessin.definirLaPositionDuPoint(zoneDeDessin.recuperePositionXduPoint() + (int) (xTouchUp - event.getX()), zoneDeDessin.recuperePositionYduPoint() + (int) (yTouchUp - event.getY()));
                     verifieQueSortDecran();
 
                     xTouchUp = event.getX();
@@ -80,7 +65,6 @@ public class MainActivity extends Activity implements SensorEventListener{
             }
         });
 
-        boutonRecommencer = (Button)findViewById(R.id.boutonRecommencer);
 
         boutonRecommencer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,11 +73,8 @@ public class MainActivity extends Activity implements SensorEventListener{
             }
         });
 
+        recupereTailleEcran();
         zoneDeDessin.donnerTailleEcran(largeur, hauteur);
-
-        controleurDeSenseurs = (SensorManager) getSystemService(SENSOR_SERVICE);
-
-        //accelerometre = controleurDeSenseurs.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         handler = new Handler();
 
@@ -119,9 +100,25 @@ public class MainActivity extends Activity implements SensorEventListener{
         };
         handler.post(testIps);
 
-        deuxChiffresPourLesSecondes = new DecimalFormat("00");
-
         nouveauJeu();
+    }
+
+    /**
+     * Récupére la taille de l'écran et la stocke dans heuteur et largeur
+     */
+    private void recupereTailleEcran() {
+        Display ecran = getWindowManager().getDefaultDisplay();
+        Point taille = new Point();
+        // Si la version est inférieur à celle de honeycomb (13)
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB_MR2){
+            hauteur = ecran.getHeight();
+            largeur = ecran.getWidth();
+        }
+        else{
+            ecran.getSize(taille);
+            largeur = taille.x;
+            hauteur = taille.y;
+        }
     }
 
     /**
@@ -174,6 +171,7 @@ public class MainActivity extends Activity implements SensorEventListener{
      * Le temps formatté
      */
     private String convertisseurSecondeEnTexte() {
+        DecimalFormat deuxChiffresPourLesSecondes = new DecimalFormat("00");
         int minutes = tempsRestant /60;
         int secondes = tempsRestant %60;
 
@@ -213,30 +211,8 @@ public class MainActivity extends Activity implements SensorEventListener{
             zoneDeDessin.definirLaPositionDuPoint(zoneDeDessin.recuperePositionXduPoint(), 0);}
     }
 
-    // On stock l'appel de l'enregistrement pour le senseur
     @Override
     protected void onResume() {
-        //controleurDeSenseurs.registerListener(this, accelerometre, SensorManager.SENSOR_DELAY_GAME);
         super.onResume();
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-       /* float x, y;
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            x = 3*event.values[0];
-            y = 3*event.values[1];
-
-            if((Math.abs(x) > 1 || Math.abs(y) > 1)){
-                zoneDeDessin.definirLaPositionDuPoint((int) (zoneDeDessin.recuperePositionXduPoint() - x), (int) (zoneDeDessin.recuperePositionYduPoint() + y));
-                verifieQueSortDecran();
-                //zoneDeDessin.dessiner();
-            }
-        }*/
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // On ne s'en sert pas
     }
 }
